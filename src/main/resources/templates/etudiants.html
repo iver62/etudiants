@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+	  xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+	  layout:decorator="template">
+<head>
+	<meta charset="UTF-8"/>
+	<title>Liste des étudiants</title>
+	<link rel="stylesheet" type="text/css" href="../static/css/bootstrap.min.css" th:href="@{/css/bootstrap.min.css}"/>
+	<link rel="stylesheet" type="text/css" href="../static/css/myStyle.css" th:href="@{/css/myStyle.css}" />
+</head>
+<body layout:fragment="content">
+
+	<div class="container spacer">
+		<a th:href="@{form}">ajouter un étudiant</a>
+	</div>
+
+	<div class="container spacer">
+		<form th:action="@{index}" method="get">
+			<div class="form-group">
+				<label>Mot Clé</label>
+				<input type="text" name="keyword" th:value="${keyword}"/>
+				<button type="submit">Chercher</button>
+			</div>
+		</form>
+	</div>
+
+	<div class="container spacer">
+		<table class="table table-striped">
+			<thead>
+				<tr>
+					<th>ID</th><th>Nom</th><th>Date</th><th>Email</th><th>Photo</th>
+				</tr>	
+			</thead>
+			<tbody>
+				<tr th:each="e:${pageEtudiants.content}">
+					<td th:text="${e.id}"/>
+					<td th:text="${e.nom}"/>
+					<td th:text="${e.dateNaissance}"/>
+					<td th:text="${e.email}"/>
+					<td>
+						<img class="img-circle" th:src="@{getPhoto(id=${e.id})}" width="100" height="100"/>
+					</td>
+					<td><a onclick="return confirm('Etes vous sûr de vouloir supprimer?')" th:href="@{supprimer(id=${e.id})}">Supprimer</a></td>
+					<td><a th:href="@{editer(id=${e.id})}">Editer</a></td>
+				</tr>
+			</tbody>
+		</table>
+	</div>
+	
+	<div class="container">
+		<ul class="nav nav-pills">
+			<li th:each="p:${pages}" th:class="${p==pageCourante}?active:''">
+				<a th:text="${p}" th:href="@{index(page=${p},keyword=${keyword})}"></a>
+			</li>
+		</ul>
+	</div>
+	
+</body>
+</html>
